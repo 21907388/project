@@ -1,91 +1,8 @@
 #include<iostream>
-#include<stdio.h>
 #include<cstdlib>
+#include <iomanip>
+
 using namespace std;
-struct node {
-	int data;
-	struct node *next;
-};
-struct node *createNode (int item){
-	struct node *temp;
-	temp = (struct node *)malloc(sizeof(node));
-	temp->data=item;
-	temp->next=NULL;
-	return temp;
-}
-int isEmpty (struct node *header){
-	if (header=NULL)
-	//return 1;
-	int g;
-	else 
-	return 0;
-}
-struct node * insertFront(struct node *header, int d)
-{
-	struct node *temp;
-	temp=createNode(d);
-	temp->next =header;
-    header=temp;
-    return header;
-}
-
-
-struct node * insertBack(struct node *header, int d)
-{
-	struct node *temp, *headertemp;
-	temp=createNode(d);
-    if(header==NULL){
-        header=temp;
-    return header;
-    }
-	headertemp=header;
-	while(headertemp->next!=NULL)
-      headertemp =headertemp->next;
-    headertemp->next=temp;
-    return header;
-}
-
-void insertAfter(struct node *afterNode, int d)
-{
-	struct node *temp;
-	temp=createNode(d);
-	temp->next=afterNode->next;
-	afterNode->next=temp;
-}
-struct node * deleteFront(struct node *header)
-{
-	struct node *temp;
-    if(header==NULL)
-	return header;
-    temp=header;
-	header= header->next;
-    free(temp);
-    return header;
-}
-
-
-struct node * deleteBack(struct node *header)
-{
-	struct node *temp, *headertemp;
-    if(header==NULL)
-    return header;
-	headertemp=header;
-	while(headertemp->next->next!=NULL)
-    headertemp =headertemp->next;
-	temp=headertemp->next;
-    headertemp->next=NULL;
-    free(temp);
-	return header;
-}
-void deleteAfter(struct node *afterNode)
-{
-	struct node *temp;
-	if(afterNode->next==NULL || afterNode==NULL)
-	return;
-	temp =afterNode->next;
-	afterNode->next=temp->next;
-	free(temp);
-}
 
 struct node{
     int data;
@@ -93,7 +10,7 @@ struct node{
     struct node *next;
 };
 
-void create_insert(node **p, int no,float arrT,float burstT,float *firstR){
+void newNodeins(node **p, int no,float arrT,float burstT,float *firstR){
     // CREATE NODE
     node *q,*r = *p;
     q = (node*)malloc(sizeof(node));
@@ -118,32 +35,32 @@ void create_insert(node **p, int no,float arrT,float burstT,float *firstR){
     }
 }
 
-void gantt_chart(node *p, int process){
+void displayGantchatt(node *p, int process){
     int i;
    node *r = p;
     cout<<"\n\nGannt Chart:\n";
     for(i=1;i<= process; i++)
-       cout<<"----------------";
+       cout<<"--------";
     cout<<"\n";
 
     for(i=1; i<= process; i++){
-        cout<<"|\t"<<setprecision(2) <<p->data<<"\t";
+        cout<<"|  P"<<setprecision(2) <<p->data<<"   ";
         p = p->next;
     }
     cout<<"|\n";
 
     for(i=1; i<= process; i++)
-        cout<<"----------------";
+        cout<<"--------";
 
     cout<<"\n";
-    cout<<"\t"<<setprecision(2) <<r->arrivalTime;
+    cout<<setprecision(2) <<r->arrivalTime<<"\t";
     for(i=1; i<= process; i++){
-        cout<<"\t"<<setprecision(2) <<r->processC;
+        cout<<setprecision(2) <<r->processC<<"\t";
         r = r->next;
     }
 }
 
-void display(node *p,int pr){
+void showFCFS(node *p,int pr){
     float tTurnarTime,tWaitingTime,tRelDelay,tResTime,tBurstTime;
     tTurnarTime=tWaitingTime=tRelDelay=tResTime=tBurstTime= 0;
     printf("\n\n\nProcess Details:");
@@ -173,3 +90,27 @@ void display(node *p,int pr){
     cout<<" Average Response Time: "<<setprecision(2)<<tResTime/pr<<"\n";
 }
 
+int main(){
+ node *head = NULL;
+    int process,i;
+    float arrival_time,burst_time,first_response;
+    printf("Enter the no. of Process: ");
+    scanf("%d",&process);
+    for(i=1; i<= process; i++){
+        printf("\nEnter the Details for Process %d: \n",i);
+        printf("\tArrival Time: ");
+        scanf("%f",&arrival_time);
+        printf("\tBurst Time: ");
+        scanf("%f",&burst_time);
+        if(i==1)
+            first_response = arrival_time;
+        newNodeins(&head,i,arrival_time,burst_time,&first_response);
+    }
+
+    printf("\n<-------------------------------------------------  START ------------------------------------->\n");
+    displayGantchatt(head,process);
+    showFCFS(head,process);
+    printf("\n<-------------------------------------------------  END ------------------------------------->\n");
+
+	return 0;
+}
