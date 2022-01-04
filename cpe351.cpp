@@ -107,10 +107,9 @@ int main(){
         newNodeins(&head,i,arrival_time,burst_time,&first_response);
     }
 
-    printf("\n<-------------------------------------------------  START ------------------------------------->\n");
     displayGantchatt(head,process);
     showFCFS(head,process);
-    printf("\n<-------------------------------------------------  END ------------------------------------->\n");
+
 
 	return 0;
 }
