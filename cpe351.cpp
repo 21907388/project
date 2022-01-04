@@ -11,7 +11,7 @@ struct node{
 };
 
 void newNodeins(node **p, int no,float arrT,float burstT,float *firstR){
-    // CREATE NODE
+
     node *q,*r = *p;
     q = (node*)malloc(sizeof(node));
     q->data = no;
@@ -22,9 +22,9 @@ void newNodeins(node **p, int no,float arrT,float burstT,float *firstR){
     q->turnaroundTime = q->processC - arrT;
     q->waitingTime = q->turnaroundTime - burstT;
     q->relativeDelay = q->turnaroundTime/burstT ;
-    *firstR = *firstR + burstT; // Update First Response for next NODE
+    *firstR = *firstR + burstT;
 
-    // INSERT NODE AT END
+ 
     q->next = NULL;
     if(*p == NULL)
         *p = q;
@@ -72,8 +72,8 @@ void showFCFS(node *p,int pr){
         cout<<"Waiting Time: "<<setprecision(2)<<p->waitingTime<<"\n";
         cout<<"Relative Delay: "<<setprecision(2)<<p->relativeDelay<<"\n";
         cout<<"Response Time: "<<setprecision(2)<<p->responseTime<<"\n";
-        // Storing the Total value for average
-        tTurnarTime += p->turnaroundTime; // ttat = ttat + p->tat
+    
+        tTurnarTime += p->turnaroundTime; 
         tWaitingTime += p->waitingTime;
         tRelDelay+= p->relativeDelay;
         tResTime += p->responseTime;
