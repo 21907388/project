@@ -1,12 +1,13 @@
 #include<iostream>
 #include<cstdlib>
 #include <iomanip>
+#include<getopt.h>
 
 using namespace std;
 
 struct node{
     int data;
-    float arrivalTime,burstTime,processC,turnaroundTime,waitingTime,responseTime,relativeDelay;
+    float arrivalTime,burstTime,processC,turnaroundTime,waitingTime,responseTime,relativeDelay,priority;
     struct node *next;
 };
 
@@ -22,9 +23,9 @@ void newNodeins(node **p, int no,float arrT,float burstT,float *firstR){
     q->turnaroundTime = q->processC - arrT;
     q->waitingTime = q->turnaroundTime - burstT;
     q->relativeDelay = q->turnaroundTime/burstT ;
-    *firstR = *firstR + burstT;
+    *firstR = *firstR + burstT; 
 
- 
+
     q->next = NULL;
     if(*p == NULL)
         *p = q;
@@ -63,53 +64,135 @@ void displayGantchatt(node *p, int process){
 void showFCFS(node *p,int pr){
     float tTurnarTime,tWaitingTime,tRelDelay,tResTime,tBurstTime;
     tTurnarTime=tWaitingTime=tRelDelay=tResTime=tBurstTime= 0;
-    printf("\n\n\nProcess Details:");
+    cout<<"\n\n\nProcess Details after first come, first served: ";
     while(p!=NULL){
         cout<<"\n Process "<<setprecision(2)<<p->data<<"\n";
         cout<<"Arrival Time: "<<setprecision(2)<<p->arrivalTime<<"\n";
+        
         cout<<"Burst Time: "<<setprecision(2)<<p->burstTime<<"\n";
-        cout<<"Turn Around Time: "<<setprecision(2)<<p->turnaroundTime<<"\n";
+        
         cout<<"Waiting Time: "<<setprecision(2)<<p->waitingTime<<"\n";
-        cout<<"Relative Delay: "<<setprecision(2)<<p->relativeDelay<<"\n";
-        cout<<"Response Time: "<<setprecision(2)<<p->responseTime<<"\n";
     
-        tTurnarTime += p->turnaroundTime; 
+        
         tWaitingTime += p->waitingTime;
-        tRelDelay+= p->relativeDelay;
-        tResTime += p->responseTime;
-        tBurstTime += p->burstTime;
-
+        
         p = p->next;
 
     }
     cout<<"\n\n\nOverall Details:\n";
     cout<<" Throughput: "<<setprecision(2)<<pr/tBurstTime<<"\n";
-    cout<<" Average Turn Around Time: "<<setprecision(2)<<tTurnarTime/pr<<"\n";
-    cout<<" Average Waiting Time: "<<setprecision(2)<<tWaitingTime/pr<<"\n";
-    cout<<" Average Relative Delay: "<<setprecision(2)<<tRelDelay/pr<<"\n"; 
-    cout<<" Average Response Time: "<<setprecision(2)<<tResTime/pr<<"\n";
+      cout<<" Average Waiting Time: "<<setprecision(2)<<tWaitingTime/pr<<"\n";
+
 }
 
-int main(){
+void printoutput(char filename[50]){
+	cout<<"can not write output to"<<filename;
+}
+int main(int argc,char **argv){
+	int option,oflag=0,fflag=0;
+	char *filename;
+	while ((option=getopt(argc,argv,"of"))!=-1){
+		switch (option){
+			case 'o':
+			if (oflag){
+				cout<<"only one option\n";
+				exit(1);
+			}
+			else {
+			oflag++;
+			fflag++;
+			}
+			cout<<"  output command!";
+			filename=optarg;
+			cout<<" can not do this action ";
+			exit(1);
+			break;
+			case 'f':
+			if	(fflag){
+				cout<<"only one option\n";
+				exit(1);
+			}
+			else {
+			oflag++;
+			fflag++;
+			}
+			cout<<" input command!(can not be done you need to enter the input)";
+			filename=optarg;
+			cout<<" can not do this action on";
+			exit(1);
+			break;
+				
+			
+		}
+	}
  node *head = NULL;
-    int process,i;
-    float arrival_time,burst_time,first_response;
-    printf("Enter the no. of Process: ");
-    scanf("%d",&process);
+    int process,i,options;
+    float arrival_time,burst_time,first_response,prio;
+   cout<<"Enter the no. of Process: ";
+    cin>>process;
     for(i=1; i<= process; i++){
-        printf("\nEnter the Details for Process %d: \n",i);
-        printf("\tArrival Time: ");
-        scanf("%f",&arrival_time);
-        printf("\tBurst Time: ");
-        scanf("%f",&burst_time);
+        cout<<"\nEnter the Details for Process "<<i<<" \n";
+        cout<<"\tArrival Time: ";
+        cin>>arrival_time;
+       cout<<"\tBurst Time: ";
+        cin>>burst_time;
+         cout<<"\tPriority: ";
+        cin>>prio;
         if(i==1)
             first_response = arrival_time;
         newNodeins(&head,i,arrival_time,burst_time,&first_response);
     }
+    
+    cout<<"\n\t CPU SCHEDULING SIMILATOR \n";
+    	cout<<"\n Please pick one option among the ones below (if this is your frist time it is recommand that you pick option <1>) ";
+	cout<<" \n 1) Scheduling Method (None)";
+	cout<<" \n 2) Preemptive Mode (Off)";
+	cout<<" \n 3) Show Result ";
+	cout<<" \n 4) End Program\n ";
+	cin>>options;
 
-    displayGantchatt(head,process);
-    showFCFS(head,process);
+	switch (options){
+		case 1 :
+			cout<<" \t Scheduling method ";
+			int sched;
+			cout<<" Please pick one scheduling method among the ones below";
+			cout<<" \n 1)None: None of scheduling method chosen";
+            cout<<" \n 2)First Come, First Served Scheduling";
+            cout<<" \n 3)Shortest-Job-First Scheduling";
+            cout<<" \n 4)Priority Scheduling";
+            cout<<" \n 5)Round-Robin Scheduling\n "; 
+            cin>>sched;
+            switch (sched){
+            case 1 :
+			   cout<<" None of the scheduling method chosen";
+			   
+			   break;
+			case 2 :
+			   cout<<" \n\tFirst come, frirst served scheduling";
+		    
+               displayGantchatt(head,process);
+               showFCFS(head,process);
+               
+               
+		    break;
+		    case 3 :
+		       cout<<" \n\tShortest-Job-First Scheduling";
+		    
+			break;   
+		    case 4 :
+		    	cout<<" \n\tPriority Scheduling";
+		    
+			break;	
+		    case 5 :
+		    	cout<<" \n\tRound-Robin Scheduling";
+				
+			}
+			case 3:
+			  showFCFS(head,process);	
+		}
 
 
+    
+   
 	return 0;
 }
