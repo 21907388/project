@@ -7,7 +7,7 @@ using namespace std;
 
 struct node{
     int data;
-    float arrivalTime,burstTime,processC,turnaroundTime,waitingTime,responseTime,relativeDelay,priority;
+    float arrivalTime,burstTime,processC,turnaroundTime,waitingTime,responseTime,finishingTime,relativeDelay,priority;
     struct node *next;
 };
 
@@ -85,6 +85,63 @@ void showFCFS(node *p,int pr){
 
 }
 
+void SJF(node *header, int n)
+{
+
+	node *temp;
+	temp=header;
+    int complete,current_time,index,minimum;
+    double total_waiting_time = 0.0;
+    double total_turn_around_time = 0.0;
+ 
+    index = -1;
+    complete = 0;
+    current_time = 10;
+    minimum = 10;//INT_MAX;
+ 
+    while(complete < n)
+    {
+        while(temp!=NULL)//for(int i=0; i<n; i++)
+        {
+            if(temp->arrivalTime <= current_time)
+            {
+            	temp->finishingTime=0;
+                if(temp->burstTime < minimum && temp->finishingTime == 0)
+                {
+                	        
+                     index++;
+                    minimum = temp->burstTime;
+                   
+                }
+            }
+            temp=temp->next;
+            
+        }
+ 
+        if(index >= 0)
+        {
+            complete++;
+            minimum = INT_MAX;
+            current_time += temp->burstTime;
+           temp->finishingTime = current_time;
+            temp->turnaroundTime = temp->finishingTime - temp->arrivalTime;
+            temp->waitingTime =  temp->turnaroundTime- temp->burstTime;
+ 
+            total_waiting_time += temp->waitingTime;
+            total_turn_around_time += temp->turnaroundTime;
+ 
+            index = -1;
+        }
+        else
+        {
+            current_time++;
+        }
+    }
+ 
+
+    cout<<"Average Waiting Time: "<<(total_waiting_time/n)<<"\n";
+    cout<<"Average Turn Around Time: "<<(total_turn_around_time/n)<<"\n";
+}
 void printoutput(char filename[50]){
 	cout<<"can not write output to"<<filename;
 }
@@ -177,7 +234,7 @@ int main(int argc,char **argv){
 		    break;
 		    case 3 :
 		       cout<<" \n\tShortest-Job-First Scheduling";
-		    
+		       SJF(head,process);
 			break;   
 		    case 4 :
 		    	cout<<" \n\tPriority Scheduling";
