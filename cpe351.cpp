@@ -475,11 +475,11 @@ int main(int argc,char **argv){
 		    case 3 :
 		       cout<<" \n\tShortest-Job-First Scheduling";
 		      
-		      shortestjobfirst(head);
+		      shortestjobfirstinFile(head);
 			break;   
 		    case 4 :
 		    	cout<<" \n\tPriority Scheduling";
-		    prioritysch(head);
+		    priorityschinFile(head);
 			break;	
 		    case 5 :
 		    	cout<<" \n\tRound-Robin Scheduling";
