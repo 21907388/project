@@ -1,3 +1,3 @@
-this code is only doing one scheduling method which is first come first served i tried to do shortest job first but couldn't get the result i wanted i still uploaded my code.
+this code is doing three scheduling methods first come, first served, non-preemptive shortest job first and no-preemptive priority scheduling.
 
-i have tried to take input from a file as a table but i couldn't so input will be get from the user
+there might probably be some few error while running the code but basically it works. 
